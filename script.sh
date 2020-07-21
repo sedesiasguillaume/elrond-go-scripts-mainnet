@@ -41,6 +41,7 @@ case "$1" in
   mkdir -p $GOPATH/src/github.com/ElrondNetwork
   git_clone
   build_node
+  build_keygen
   
   #Run the install process for each node
   for i in $(seq 1 $NUMBEROFNODES); 
