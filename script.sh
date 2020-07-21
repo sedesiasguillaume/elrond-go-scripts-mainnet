@@ -62,11 +62,12 @@ case "$1" in
   cd $GOPATH/src/github.com/ElrondNetwork/elrond-config-mainnet
   INSTALLED_CONFIGS=$(git status | grep HEAD | awk '{print $4}')
   echo -e
-  echo -e "${GREEN}Local version for configs: ${CYAN}$INSTALLED_CONFIGS${NC}"
+  echo -e "${GREEN}Local version for configs: ${CYAN}tags/$INSTALLED_CONFIGS${NC}"
   echo -e
   echo -e "${GREEN}Github version of configs: ${CYAN}$CONFIGVER${NC}"
   echo -e
-  
+  echo -e "${GREEN}Release notes for the latest version:${NC}"
+  echo -e "${GREEN}$RELEASENOTES${NC}"  
   echo -e 
   read -p "Do you want to go on with the upgrade (Default No) ? (Yy/Nn)" yn
   echo -e
