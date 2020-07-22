@@ -95,11 +95,42 @@ case "$1" in
                mv $UPDATEWORKDIR/config/prefs.toml.save $UPDATEWORKDIR/config/prefs.toml
                sudo systemctl start elrond-node-$UPDATEINDEX
            done
-        
             ;;
             
        [Nn]* )
           echo -e "${GREEN}Fine ! Skipping upgrade on this machine...${NC}"
+            ;;
+            
+           * )
+           echo -e "${GREEN}I'll take that as a no then... moving on...${NC}"
+            ;;
+      esac
+  ;;
+
+'remove_db')
+  paths
+  echo -e
+  echo -e "${RED}This action will completly erase the DBs and logs of your nodes !${NC}"  
+  echo -e 
+  read -p "Do you want to go on with the DB erase (Default No) ? (Yy/Nn)" yn
+  echo -e
+  case $yn in
+       [Yy]* )
+
+         INSTALLEDNODES=$(cat $CUSTOM_HOME/.numberofnodes)
+         #Run the cleaning process for each node
+         for i in $(seq 1 $INSTALLEDNODES);
+             do
+               UPDATEINDEX=$(( $i - 1 ))
+               UPDATEWORKDIR="$CUSTOM_HOME/elrond-nodes/node-$UPDATEINDEX"
+               sudo systemctl stop elrond-node-$UPDATEINDEX
+               cleanup
+               sudo systemctl start elrond-node-$UPDATEINDEX
+           done
+            ;;
+            
+       [Nn]* )
+          echo -e "${GREEN}Fine ! Skipping DB cleanup on this machine...${NC}"
             ;;
             
            * )
@@ -176,7 +207,7 @@ case "$1" in
             echo -e
             sed -i 'N;$!P;$!D;$d' ~/.profile
             
-            echo -e "${GREEN}Removing cloned elrond-go & elrond-configs repo from host ${CYAN}$HOST${GREEN}...${NC}"
+            echo -e "${GREEN}Removing cloned elrond-go & elrond-configs repos from host ${CYAN}$HOST${GREEN}...${NC}"
             echo -e      
             if [ -d "$GOPATH/src/github.com/ElrondNetwork/elrond-go" ]; then sudo rm -rf $GOPATH/src/github.com/ElrondNetwork/elrond-*; fi      
             ;;
