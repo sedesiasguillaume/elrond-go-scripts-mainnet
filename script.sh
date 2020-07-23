@@ -30,7 +30,6 @@ case "$1" in
   if ! [ -d "$CUSTOM_HOME" ]; then echo -e "${RED}Please configure your variables first ! (variables.cfg --> CUSTOM_HOME & CUSTOM_USER)${NC}"; exit; fi
 
   prerequisites
-  replicant
 
   #Keep track of how many nodes you've started on the machine
   echo "$NUMBEROFNODES" > $CUSTOM_HOME/.numberofnodes
@@ -124,6 +123,9 @@ case "$1" in
              do
                UPDATEINDEX=$(( $i - 1 ))
                UPDATEWORKDIR="$CUSTOM_HOME/elrond-nodes/node-$UPDATEINDEX"
+               
+               echo -e "${GREEN}Stopping Elrond Node-$UPDATEINDEX binary...${NC}"
+               
                sudo systemctl stop elrond-node-$UPDATEINDEX
                cleanup
                sudo systemctl start elrond-node-$UPDATEINDEX
@@ -250,7 +252,6 @@ case "$1" in
   echo -e "${GREEN}---> Restoring your config files${NC}"
   echo -e
   cp -f $CUSTOM_HOME/script-configs-backup/* $SCRIPTPATH/config/
-  replicant
   echo -e "${GREEN}---> Finished fetching scripts...${NC}"
   echo -e
   ;;
