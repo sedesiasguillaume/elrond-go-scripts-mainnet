@@ -59,52 +59,64 @@ case "$1" in
 
 'upgrade')
   paths
-  cd $GOPATH/src/github.com/ElrondNetwork/elrond-config-mainnet
-  INSTALLED_CONFIGS=$(git status | grep HEAD | awk '{print $4}')
-  echo -e
-  echo -e "${GREEN}Local version for configs: ${CYAN}tags/$INSTALLED_CONFIGS${NC}"
-  echo -e
-  echo -e "${GREEN}Github version of configs: ${CYAN}$CONFIGVER${NC}"
-  echo -e
-  echo -e "${GREEN}Release notes for the latest version:${NC}"
-  echo -e "${GREEN}$RELEASENOTES${NC}"  
-  echo -e 
-  read -p "Do you want to go on with the upgrade (Default No) ? (Yy/Nn)" yn
-  echo -e
-  case $yn in
-       [Yy]* )
-         #Remove previously cloned repos
-         if [ -d "$GOPATH/src/github.com/ElrondNetwork/elrond-go" ]; then sudo rm -rf $GOPATH/src/github.com/ElrondNetwork/elrond-*; echo -e; echo -e "${RED}--> Repos present. Removing and fetching again...${NC}"; echo -e; fi
-         git_clone
-         build_node
-         build_keygen
-         if ! [ -d "$CUSTOM_HOME/elrond-utils" ]; then mkdir -p $CUSTOM_HOME/elrond-utils; fi
-         install_utils
+  #Check to see if scripts have been updated
+  cd $SCRIPTPATH
+  CURRENT_SCRIPTS_COMMIT=$(git show | grep commit | awk '{print $2}')
   
-         INSTALLEDNODES=$(cat $CUSTOM_HOME/.numberofnodes)
+      if [ $LATEST_SCRIPTS_COMMIT == $CURRENT_SCRIPTS_COMMIT ]; then
+          echo "Strings are equal"
+          cd $GOPATH/src/github.com/ElrondNetwork/elrond-config-mainnet 
+          INSTALLED_CONFIGS=$(git status | grep HEAD | awk '{print $4}')
+          echo -e
+          echo -e "${GREEN}Local version for configs: ${CYAN}tags/$INSTALLED_CONFIGS${NC}"
+          echo -e
+          echo -e "${GREEN}Github version of configs: ${CYAN}$CONFIGVER${NC}"
+          echo -e
+          echo -e "${GREEN}Release notes for the latest version:${NC}"
+          echo -e "${GREEN}$RELEASENOTES${NC}"  
+          echo -e 
+          read -p "Do you want to go on with the upgrade (Default No) ? (Yy/Nn)" yn
+          echo -e
   
-         #Run the update process for each node
-         for i in $(seq 1 $INSTALLEDNODES);
-             do
-               UPDATEINDEX=$(( $i - 1 ))
-               UPDATEWORKDIR="$CUSTOM_HOME/elrond-nodes/node-$UPDATEINDEX"
-               cp -f $UPDATEWORKDIR/config/prefs.toml $UPDATEWORKDIR/config/prefs.toml.save
+          case $yn in
+               [Yy]* )
+                 #Remove previously cloned repos
+                 if [ -d "$GOPATH/src/github.com/ElrondNetwork/elrond-go" ]; then sudo rm -rf $GOPATH/src/github.com/ElrondNetwork/elrond-*; echo -e; echo -e "${RED}--> Repos present. Removing and fetching again...${NC}"; echo -e; fi
+                   git_clone
+                   build_node
+                   build_keygen
+                 if ! [ -d "$CUSTOM_HOME/elrond-utils" ]; then mkdir -p $CUSTOM_HOME/elrond-utils; fi
+                   install_utils
+  
+                 INSTALLEDNODES=$(cat $CUSTOM_HOME/.numberofnodes)
+  
+                 #Run the update process for each node
+                 for i in $(seq 1 $INSTALLEDNODES);
+                      do
+                        UPDATEINDEX=$(( $i - 1 ))
+                        UPDATEWORKDIR="$CUSTOM_HOME/elrond-nodes/node-$UPDATEINDEX"
+                        cp -f $UPDATEWORKDIR/config/prefs.toml $UPDATEWORKDIR/config/prefs.toml.save
         
-               sudo systemctl stop elrond-node-$UPDATEINDEX
-               update
-               mv $UPDATEWORKDIR/config/prefs.toml.save $UPDATEWORKDIR/config/prefs.toml
-               sudo systemctl start elrond-node-$UPDATEINDEX
-           done
-            ;;
+                        sudo systemctl stop elrond-node-$UPDATEINDEX
+                        update
+                        mv $UPDATEWORKDIR/config/prefs.toml.save $UPDATEWORKDIR/config/prefs.toml
+                        sudo systemctl start elrond-node-$UPDATEINDEX
+                    done
+                  ;;
             
-       [Nn]* )
-          echo -e "${GREEN}Fine ! Skipping upgrade on this machine...${NC}"
-            ;;
+                [Nn]* )
+                  echo -e "${GREEN}Fine ! Skipping upgrade on this machine...${NC}"
+                  ;;
             
-           * )
-           echo -e "${GREEN}I'll take that as a no then... moving on...${NC}"
-            ;;
-      esac
+                * )
+                  echo -e "${GREEN}I'll take that as a no then... moving on...${NC}"
+                  ;;
+            esac
+  
+        else
+          echo -e "${RED}You do not have the latest version of the elrond-go-scripts-mainnet !!!${NC}"
+          echo -e "${RED}Please run ${CYAN}./script.sh github_pull${RED} before running the upgrade command...${NC}"
+       fi
   ;;
 
 'remove_db')
