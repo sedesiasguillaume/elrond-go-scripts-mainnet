@@ -248,7 +248,6 @@ case "$1" in
   
   echo -e "${GREEN}---> Fetching the latest version of the sripts...${NC}"
   echo -e
-  
   #First let's check if the repo is accesible
   REPO_STATUS=$(curl -I "https://github.com/ElrondNetwork/elrond-go-scripts-mainnet" 2>&1 | awk '/HTTP\// {print $2}')
   cd $SCRIPTPATH
