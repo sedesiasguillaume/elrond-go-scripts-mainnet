@@ -15,8 +15,7 @@ Each node will run in background as a separate systemd unit.
 ## SCRIPT SETTINGS - MUST BE MODIFIED BEFORE FIRST RUN
 
 - config/variables.cfg - used to define username, home path, validator keys location, Github OAUTH Token, SSH port, extra node parameters.
-- config/identity      - used to define the path to the SSH key - <MAKE SURE YOU EDIT THIS FILE TO MATCH YOUR SETUP!>
-- config/target_ips    - used to define the list of remote machines (IPs or hostnames), each machine in a new line
+In this file, it is very important to set the `CUSTOM_HOME` and `CUSTOM_USER` variables. Whoever wants to use the keybase identity, should provide here the `IDENTITY` value as it will be written automatically by the upgrade script each time an upgrade occurs. 
 
 ## KEY MANAGEMENT
 
