@@ -244,12 +244,10 @@ case "$1" in
   echo -e
   echo -e "${GREEN}---> Backing up your existing configs (variables.cfg & identity)${NC}"
   echo -e
-  cp -f $SCRIPTPATH/config/identity $CUSTOM_HOME/script-configs-backup
   cp -f $SCRIPTPATH/config/variables.cfg $CUSTOM_HOME/script-configs-backup
   
   echo -e "${GREEN}---> Fetching the latest version of the sripts...${NC}"
   echo -e
-  
   #First let's check if the repo is accesible
   REPO_STATUS=$(curl -I "https://github.com/ElrondNetwork/elrond-go-scripts-mainnet" 2>&1 | awk '/HTTP\// {print $2}')
   cd $SCRIPTPATH
