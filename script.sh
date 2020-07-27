@@ -244,7 +244,6 @@ case "$1" in
   echo -e
   echo -e "${GREEN}---> Backing up your existing configs (variables.cfg & identity)${NC}"
   echo -e
-  cp -f $SCRIPTPATH/config/identity $CUSTOM_HOME/script-configs-backup
   cp -f $SCRIPTPATH/config/variables.cfg $CUSTOM_HOME/script-configs-backup
   
   echo -e "${GREEN}---> Fetching the latest version of the sripts...${NC}"
