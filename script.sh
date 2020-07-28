@@ -140,7 +140,28 @@ case "$1" in
                
                sudo systemctl stop elrond-node-$UPDATEINDEX
                cleanup
-               sudo systemctl start elrond-node-$UPDATEINDEX
+
+               #Ask to start the nodes or not after the DB cleanup
+               echo -e 
+               read -p "Do you want to restart elrond-node-$UPDATEINDEX after the DB erase (Default No) ? (Yy/Nn)" yn
+               echo -e
+               case $yn in
+                    [Yy]* )
+                       echo -e "${GREEN}Starting elrond-node-$UPDATEINDEX...${NC}"
+                       echo -e
+                       sudo systemctl start elrond-node-$UPDATEINDEX
+                         ;;
+                      
+                    [Nn]* )
+                       echo -e "${GREEN}Fine ! Leaving node off...${NC}"
+                       echo -e
+                         ;;
+            
+                        * )
+                        echo -e "${GREEN}I'll take that as a no then... moving on...${NC}"
+                        echo -e
+                         ;;
+                    esac
            done
             ;;
             
