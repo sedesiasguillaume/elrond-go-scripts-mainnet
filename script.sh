@@ -303,7 +303,7 @@ case "$1" in
         echo -e
         echo -e "${GREEN}Getting logs for Elrond Node-$LOGSINDEX binary...${NC}"
         echo -e
-        LOGSPUBLIC=$(curl -s http://127.0.0.1:$LOGSAPIPORT/node/status | jq -r .details.erd_public_key_block_sign | head -c 12)
+        LOGSPUBLIC=$(curl -s http://127.0.0.1:$LOGSAPIPORT/node/status | jq -r .data.metrics.erd_public_key_block_sign | head -c 12)
         sudo journalctl --unit elrond-node-$LOGSINDEX >> $CUSTOM_HOME/elrond-logs/elrond-node-$LOGSINDEX-$LOGSPUBLIC.log
       done
 
