@@ -354,6 +354,7 @@ case $opt in
   variables_restore
   echo -e "${GREEN}---> Finished fetching scripts...${NC}"
   echo -e
+  break
   ;;
 
 'get_logs')
@@ -377,7 +378,8 @@ case $opt in
       done
 
   #Compress the logs and erase files
-  cd $CUSTOM_HOME/elrond-logs/ && tar -zcvf elrond-node-logs-$LOGSTIME.tar.gz *.log && rm *.log  
+  cd $CUSTOM_HOME/elrond-logs/ && tar -zcvf elrond-node-logs-$LOGSTIME.tar.gz *.log && rm *.log
+  break 
   ;;
 
 'quit')
