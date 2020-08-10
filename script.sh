@@ -27,6 +27,7 @@ echo -e "${GREEN}8) ${CYAN}github_pull${GREEN} - Get latest version of scripts f
 echo -e "${GREEN}9) ${CYAN}quit${GREEN} - Exit this menu${NC}"
 echo -e
 
+COLUMNS=12
 PS3="Please select an action:"
 options=("install" "observers" "upgrade" "remove_db" "start" "stop" "cleanup" "github_pull" "quit")
 
