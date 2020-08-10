@@ -259,14 +259,8 @@ case "$1" in
   ;;
 
 'github_pull')
-  #First backup identity, target_ips & variables.cfg
-  if ! [ -d "$CUSTOM_HOME/script-configs-backup" ]; then mkdir -p $CUSTOM_HOME/script-configs-backup; fi
-  
-  echo -e
-  echo -e "${GREEN}---> Backing up your existing configs (variables.cfg & identity)${NC}"
-  echo -e
-  cp -f $SCRIPTPATH/config/variables.cfg $CUSTOM_HOME/script-configs-backup
-  
+  #First backup variables.cfg
+  variables_backup
   echo -e "${GREEN}---> Fetching the latest version of the sripts...${NC}"
   echo -e
   #First let's check if the repo is accesible
@@ -279,10 +273,10 @@ case "$1" in
                                 git pull
                       else echo -e "${RED}---> elrond-go-scripts-mainnet on Github not reachable !${NC}"
               fi
-  #Restore configs after repo pull
+  #Restore custom variables after repo pull
   echo -e "${GREEN}---> Restoring your config files${NC}"
   echo -e
-  cp -f $CUSTOM_HOME/script-configs-backup/* $SCRIPTPATH/config/
+  variables_restore
   echo -e "${GREEN}---> Finished fetching scripts...${NC}"
   echo -e
   ;;
