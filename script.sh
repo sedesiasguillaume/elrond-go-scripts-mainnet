@@ -77,7 +77,7 @@ case $opt in
 
 'observers')
   #Install observers for all shards
-  NUMBEROFNODES = 4
+  NUMBEROFNODES=4
   
   #Check if CUSTOM_HOME exists
   if ! [ -d "$CUSTOM_HOME" ]; then echo -e "${RED}Please configure your variables first ! (variables.cfg --> CUSTOM_HOME & CUSTOM_USER)${NC}"; exit; fi
