@@ -195,7 +195,7 @@ case $opt in
          #Remove previously cloned repo
          if [ -d "$GOPATH/src/github.com/ElrondNetwork/elrond-proxy-go" ]; then sudo rm -rf $GOPATH/src/github.com/ElrondNetwork/elrond-proxy-go; echo -e; echo -e "${RED}--> Repo present. Removing and fetching again...${NC}"; echo -e; fi
            git_clone_proxy
-           sudo systemctl stop elrond-proxy
+           pidof proxy >/dev/null && sudo service elrond-proxy stop
            #Remove old proxy folder & service
            if [ -e /etc/systemd/system/elrond-proxy.service ]; then sudo rm /etc/systemd/system/elrond-proxy.service; fi
            sudo systemctl daemon-reload
