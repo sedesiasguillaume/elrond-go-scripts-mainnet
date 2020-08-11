@@ -19,17 +19,18 @@ echo -e
 echo -e "${GREEN}1) ${CYAN}install${GREEN} - Regular install process for validator nodes${NC}"
 echo -e "${GREEN}2) ${CYAN}observers${GREEN} - Observers and proxy install option${NC}"
 echo -e "${GREEN}3) ${CYAN}upgrade${GREEN} - Run the upgrade process for the installed nodes${NC}"
-echo -e "${GREEN}4) ${CYAN}remove_db${GREEN} - Remove the nodes databases (individual node selection)${NC}"
-echo -e "${GREEN}5) ${CYAN}start${GREEN} - Start all the installed nodes (will also start elrond-proxy if installed)${NC}"
-echo -e "${GREEN}6) ${CYAN}stop${GREEN} - Stop all the installed nodes (will also stop elrond-proxy if installed)${NC}"
-echo -e "${GREEN}7) ${CYAN}cleanup${GREEN} - Remove everything from the host${NC}"
-echo -e "${GREEN}8) ${CYAN}github_pull${GREEN} - Get latest version of scripts from github (with variables backup)${NC}"
-echo -e "${GREEN}9) ${CYAN}quit${GREEN} - Exit this menu${NC}"
+echo -e "${GREEN}4) ${CYAN}upgrade_proxy${GREEN} - Run the upgrade process for the installed proxy${NC}"
+echo -e "${GREEN}5) ${CYAN}remove_db${GREEN} - Remove the nodes databases (individual node selection)${NC}"
+echo -e "${GREEN}6) ${CYAN}start${GREEN} - Start all the installed nodes (will also start elrond-proxy if installed)${NC}"
+echo -e "${GREEN}7) ${CYAN}stop${GREEN} - Stop all the installed nodes (will also stop elrond-proxy if installed)${NC}"
+echo -e "${GREEN}8) ${CYAN}cleanup${GREEN} - Remove everything from the host${NC}"
+echo -e "${GREEN}9) ${CYAN}github_pull${GREEN} - Get latest version of scripts from github (with variables backup)${NC}"
+echo -e "${GREEN}10) ${CYAN}quit${GREEN} - Exit this menu${NC}"
 echo -e
 
 COLUMNS=12
 PS3="Please select an action:"
-options=("install" "observers" "upgrade" "remove_db" "start" "stop" "cleanup" "github_pull" "quit")
+options=("install" "observers" "upgrade" "upgrade_proxy" "remove_db" "start" "stop" "cleanup" "github_pull" "quit")
 
 select opt in "${options[@]}"
 do
@@ -93,6 +94,7 @@ case $opt in
   if [ -d "$GOPATH/src/github.com/ElrondNetwork/elrond-go" ]; then echo -e "${RED}--> Repos present. Either run the upgrade command or cleanup & install again...${NC}"; echo -e; exit; fi
   mkdir -p $GOPATH/src/github.com/ElrondNetwork
   git_clone
+  git_clone_proxy
   build_node
   build_keygen
   
@@ -180,6 +182,40 @@ case $opt in
           echo -e "${RED}You do not have the latest version of the elrond-go-scripts-mainnet !!!${NC}"
           echo -e "${RED}Please run ${CYAN}./script.sh github_pull${RED} before running the upgrade command...${NC}"
        fi
+  break
+  ;;
+
+'upgrade_proxy')
+  read -p "Do you want to go on with the upgrade (Default No) ? (Yy/Nn)" yn
+  echo -e
+
+  case $yn in
+       [Yy]* )
+         #Remove previously cloned repo
+         if [ -d "$GOPATH/src/github.com/ElrondNetwork/elrond-proxy-go" ]; then sudo rm -rf $GOPATH/src/github.com/ElrondNetwork/elrond-proxy-go; echo -e; echo -e "${RED}--> Repo present. Removing and fetching again...${NC}"; echo -e; fi
+           git_clone_proxy
+           sudo systemctl stop elrond-proxy
+           #Remove old proxy folder & service
+           if [ -e /etc/systemd/system/elrond-proxy.service ]; then sudo rm /etc/systemd/system/elrond-proxy.service; fi
+           sudo systemctl daemon-reload
+           if [ -d $CUSTOM_HOME/elrond-proxy/ ]; then sudo rm -rf $CUSTOM_HOME/elrond-proxy/; fi
+           
+           #Rebuild the proxy & run the config for it again
+           elrond_proxy
+           proxy_config
+
+           #Restart the new proxy
+           sudo systemctl start elrond-proxy
+          ;;
+    
+        [Nn]* )
+          echo -e "${GREEN}Fine ! Skipping proxy upgrade on this machine...${NC}"
+          ;;
+    
+        * )
+          echo -e "${GREEN}I'll take that as a no then... moving on...${NC}"
+          ;;
+    esac
   break
   ;;
 
