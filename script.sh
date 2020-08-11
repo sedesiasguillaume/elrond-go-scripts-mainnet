@@ -187,6 +187,9 @@ case $opt in
 
 'upgrade_proxy')
   paths
+  echo -e
+  echo -e "${GREEN}This option will rebuild your proxy from the latest github code.${NC}"
+  echo -e
   read -p "Do you want to go on with the upgrade (Default No) ? (Yy/Nn)" yn
   echo -e
 
