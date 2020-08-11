@@ -186,6 +186,7 @@ case $opt in
   ;;
 
 'upgrade_proxy')
+  paths
   read -p "Do you want to go on with the upgrade (Default No) ? (Yy/Nn)" yn
   echo -e
 
