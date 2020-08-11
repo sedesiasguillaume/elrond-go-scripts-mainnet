@@ -250,7 +250,12 @@ case $opt in
         echo -e
         sudo systemctl start elrond-node-$STARTINDEX
       done
-  if [ -e /etc/systemd/system/elrond-proxy.service ]; then sudo systemctl start elrond-proxy; fi
+  if [ -e /etc/systemd/system/elrond-proxy.service ]; then
+                                        echo -e
+                                        echo -e "${GREEN}Starting the Elrond Proxy service on host ${CYAN}$HOST${GREEN}...${NC}"
+                                        echo -e
+                                        sudo systemctl start elrond-proxy
+            fi
   break
   ;;
 
@@ -264,7 +269,12 @@ case $opt in
         echo -e
         sudo systemctl stop elrond-node-$STOPINDEX
       done
-  if [ -e /etc/systemd/system/elrond-proxy.service ]; then sudo systemctl stop elrond-proxy; fi
+  if [ -e /etc/systemd/system/elrond-proxy.service ]; then
+                                        echo -e
+                                        echo -e "${GREEN}Stopping the Elrond Proxy service on host ${CYAN}$HOST${GREEN}...${NC}"
+                                        echo -e
+                                        sudo systemctl stop elrond-proxy
+            fi
   break
   ;;
 
