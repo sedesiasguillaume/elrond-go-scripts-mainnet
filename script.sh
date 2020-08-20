@@ -61,7 +61,7 @@ case "$1" in
   paths
   #Check to see if scripts have been updated
   cd $SCRIPTPATH
-  CURRENT_SCRIPTS_COMMIT=$(git show | grep commit | awk '{print $2}')
+  CURRENT_SCRIPTS_COMMIT=$(git show | grep -m 1 commit | awk '{print $2}')
   
       if [ $LATEST_SCRIPTS_COMMIT == $CURRENT_SCRIPTS_COMMIT ]; then
           echo "Strings are equal"
@@ -301,7 +301,7 @@ case "$1" in
         sudo journalctl --unit elrond-node-$LOGSINDEX >> $CUSTOM_HOME/elrond-logs/elrond-node-$LOGSINDEX-$LOGSPUBLIC.log
       done
 
-  #Compress the logs and erase files
+  #Compress logs and erase files
   cd $CUSTOM_HOME/elrond-logs/ && tar -zcvf elrond-node-logs-$LOGSTIME.tar.gz *.log && rm *.log  
   ;;
 
