@@ -301,7 +301,7 @@ case "$1" in
         sudo journalctl --unit elrond-node-$LOGSINDEX >> $CUSTOM_HOME/elrond-logs/elrond-node-$LOGSINDEX-$LOGSPUBLIC.log
       done
 
-  #Compress the logs and erase files
+  #Compress logs and erase files
   cd $CUSTOM_HOME/elrond-logs/ && tar -zcvf elrond-node-logs-$LOGSTIME.tar.gz *.log && rm *.log  
   ;;
 
