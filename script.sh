@@ -181,6 +181,9 @@ case $opt in
         else
           echo -e "${RED}You do not have the latest version of the elrond-go-scripts-mainnet !!!${NC}"
           echo -e "${RED}Please run ${CYAN}./script.sh github_pull${RED} before running the upgrade command...${NC}"
+          echo "Latest: ${LATEST_SCRIPTS_COMMIT}" 
+          echo "vs."
+          echo "Current: ${CURRENT_SCRIPTS_COMMIT}" 
        fi
   break
   ;;
