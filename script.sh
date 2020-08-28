@@ -128,6 +128,7 @@ case $opt in
   cd $SCRIPTPATH
   CURRENT_SCRIPTS_COMMIT=$(git show | grep commit | awk '{print $2}')
   
+
       if [ $LATEST_SCRIPTS_COMMIT == $CURRENT_SCRIPTS_COMMIT ]; then
           echo "Strings are equal"
           cd $GOPATH/src/github.com/ElrondNetwork/elrond-config-mainnet 
